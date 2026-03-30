@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Intelligence Dashboard</title>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Palette ────────────────────────────────────────────────────────────── */
+    :root {
+      --bg-0:       #111110;   /* page background          */
+      --bg-1:       #1C1C1A;   /* card surface             */
+      --bg-2:       #262622;   /* card inner / code blocks */
+      --bg-3:       #303030;   /* hover states             */
+
+      --text-0:     #E8E6DF;   /* primary                  */
+      --text-1:     #A8A69F;   /* secondary                */
+      --text-2:     #686664;   /* tertiary / muted         */
+
+      --accent:     #E8693C;   /* orange — primary accent  */
+      --accent-dim: #7A3318;   /* orange dim               */
+      --accent-bg:  #2A1A10;   /* orange tint bg           */
+
+      --success:    #5A9E5A;   /* green                    */
+      --success-bg: #102010;
+      --info:       #4A8EC2;   /* blue                     */
+      --info-bg:    #0E1E2E;
+      --warning:    #C29A3A;   /* amber                    */
+      --warning-bg: #201A08;
+
+      --border:     rgba(255,255,255,0.07);
+      --border-md:  rgba(255,255,255,0.11);
+
+      --radius:     6px;
+      --radius-lg:  10px;
+      --mono:       ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+      --sans:       -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* ── Base ───────────────────────────────────────────────────────────────── */
+    html, body {
+      height: 100%;
+      background: var(--bg-0);
+      color: var(--text-0);
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--accent); }
+
+    /* ── Layout ─────────────────────────────────────────────────────────────── */
+    .shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Title bar ──────────────────────────────────────────────────────────── */
+    .titlebar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      height: 42px;
+      background: var(--bg-1);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .titlebar-dots { display: flex; gap: 6px; }
+    .titlebar-dots span {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--border-md);
+    }
+    .titlebar-dots span:nth-child(1) { background: #FF5F57; }
+    .titlebar-dots span:nth-child(2) { background: #FFBD2E; }
+    .titlebar-dots span:nth-child(3) { background: #28C840; }
+    .titlebar-label {
+      flex: 1;
+      text-align: center;
+      color: var(--text-1);
+      font-size: 12px;
+      letter-spacing: 0.03em;
+    }
+    .titlebar-label strong { color: var(--accent); font-weight: 600; }
+
+    /* ── Header bar ─────────────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px 20px;
+      background: var(--bg-1);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--success);
+      animation: blink 2.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    h1 {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-0);
+      letter-spacing: 0.02em;
+    }
+    h1 span { color: var(--accent); }
+
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .generated-ts {
+      font-size: 11px;
+      color: var(--text-2);
+    }
+    .generated-ts strong { color: var(--text-1); }
+
+    /* ── Summary strip ──────────────────────────────────────────────────────── */
+    .summary {
+      display: flex;
+      gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .summary-cell {
+      flex: 1;
+      padding: 10px 16px;
+      background: var(--bg-1);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .summary-cell .s-val {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .summary-cell .s-label {
+      font-size: 10px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .s-ok      { color: var(--success); }
+    .s-loading { color: var(--warning); }
+    .s-err     { color: #E24B4A; }
+    .s-items   { color: var(--text-0); }
+
+    /* ── Main grid ──────────────────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      align-content: start;
+    }
+    @media (max-width: 1000px) { .main { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width:  640px) { .main { grid-template-columns: 1fr; } }
+
+    /* ── Source card ────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: border-color 0.15s, opacity 0.15s, transform 0.15s;
+      cursor: grab;
+    }
+    .card:hover { border-color: var(--border-md); }
+    .card:active { cursor: grabbing; }
+
+    /* drag states */
+    .card.is-dragging {
+      opacity: 0.35;
+      transform: scale(0.98);
+    }
+    .card.drag-over {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-dim);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 9px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-2);
+      gap: 8px;
+    }
+    .card-head-left { display: flex; align-items: center; gap: 8px; }
+
+    .badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .badge-success { background: var(--success-bg); color: var(--success); }
+    .badge-info    { background: var(--info-bg);    color: var(--info);    }
+    .badge-warning { background: var(--warning-bg); color: var(--warning); }
+
+    .card-label { font-size: 12px; font-weight: 600; color: var(--text-0); }
+
+    .card-head-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .card-ts { font-size: 10px; color: var(--text-2); }
+
+    .status { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-ok    { background: var(--success); }
+    .status-error { background: #E24B4A; }
+
+    /* ── Feed items ─────────────────────────────────────────────────────────── */
+    .card-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 0; }
+
+    .feed-item {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .feed-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .feed-item:first-child { padding-top: 0; }
+
+    .feed-title {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-0);
+      line-height: 1.45;
+      margin-bottom: 3px;
+      transition: color 0.12s;
+    }
+    .feed-title:hover { color: var(--accent); }
+
+    .feed-meta { display: flex; flex-direction: column; gap: 2px; margin-top: 3px; }
+    .feed-date {
+      font-size: 10px;
+      color: var(--accent);
+      opacity: 0.8;
+    }
+    .feed-summary {
+      font-size: 11px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    /* ── Error state ────────────────────────────────────────────────────────── */
+    .card-error {
+      padding: 10px 14px;
+      font-size: 11px;
+      color: #E24B4A;
+      line-height: 1.5;
+    }
+
+    /* ── Empty state ────────────────────────────────────────────────────────── */
+    .card-empty {
+      padding: 10px 14px;
+      font-size: 11px;
+      color: var(--text-2);
+    }
+
+    /* ── Status bar ─────────────────────────────────────────────────────────── */
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 36px;
+      background: var(--bg-1);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 16px;
+    }
+    .statusbar-left { display: flex; align-items: center; gap: 8px; }
+    .statusbar-dot  { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
+    .statusbar-text { font-size: 11px; color: var(--text-1); }
+    .statusbar-right { font-size: 11px; color: var(--text-2); display: flex; gap: 16px; }
+    .statusbar-right span { color: var(--text-1); }
+
+    /* ── Animations ─────────────────────────────────────────────────────────── */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Title bar (macOS terminal aesthetic) -->
+  <div class="titlebar">
+    <div class="titlebar-dots">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="titlebar-label">claude-dashboard — <strong>Claude Intelligence Feed</strong></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="live-dot"></div>
+      <h1>Claude Intelligence Dashboard — <span>8 sources</span></h1>
+    </div>
+    <div class="header-right">
+      <span class="generated-ts" id="generated-ts"></span>
+    </div>
+  </div>
+
+  <!-- Summary strip -->
+  <div class="summary" id="summary">
+    <div class="summary-cell"><div class="s-val s-ok"    id="s-ok">—</div><div class="s-label">Sources OK</div></div>
+    <div class="summary-cell"><div class="s-val s-err"   id="s-err">—</div><div class="s-label">Errors</div></div>
+    <div class="summary-cell"><div class="s-val s-items" id="s-items">—</div><div class="s-label">Items</div></div>
+    <div class="summary-cell"><div class="s-val s-items" id="s-age">—</div><div class="s-label">Data age</div></div>
+  </div>
+
+  <!-- Card grid -->
+  <main class="main" id="grid"></main>
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <div class="statusbar-left">
+      <div class="statusbar-dot"></div>
+      <span class="statusbar-text">claude-dashboard · static</span>
+    </div>
+    <div class="statusbar-right">
+      <span id="sb-items">— items</span>
+      <span id="sb-ts">generated —</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA — injected by Claude Code on each run. Do not edit this line manually.
+// ─────────────────────────────────────────────────────────────────────────────
+const DATA = /* INJECT */null/* /INJECT */;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ORDER — persisted in localStorage so user layout survives page reloads
+// ─────────────────────────────────────────────────────────────────────────────
+const ORDER_KEY = "claude-dashboard-order";
+
+function loadOrder(sources) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(ORDER_KEY) || "[]");
+    if (!Array.isArray(saved) || saved.length === 0) return sources.map(s => s.id);
+    // Keep saved order for known ids; append any new source ids at the end
+    const known = saved.filter(id => sources.find(s => s.id === id));
+    const fresh  = sources.map(s => s.id).filter(id => !known.includes(id));
+    return [...known, ...fresh];
+  } catch { return sources.map(s => s.id); }
+}
+
+function saveOrder(ids) {
+  try { localStorage.setItem(ORDER_KEY, JSON.stringify(ids)); } catch {}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function relativeAge(iso) {
+  if (!iso) return "—";
+  const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (m < 60)  return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24)  return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+function fmtTs(iso) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleString([], { month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+function buildCard(source) {
+  const badgeCls  = `badge-${source.cat || "warning"}`;
+  const statusCls = source.status === "ok" ? "status-ok" : "status-error";
+  const ts = source.fetchedAt
+    ? `<span class="card-ts">${esc(relativeAge(source.fetchedAt))}</span>` : "";
+
+  let body = "";
+  if (source.status === "error") {
+    body = `<div class="card-error">⚠ ${esc(source.error || "Unknown error")}</div>`;
+  } else if (!source.items || source.items.length === 0) {
+    body = `<div class="card-empty">No items found.</div>`;
+  } else {
+    const items = source.items.map(item => `
+      <div class="feed-item">
+        <a class="feed-title" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">
+          ${esc(item.title)}
+        </a>
+        <div class="feed-meta">
+          ${item.date    ? `<span class="feed-date">${esc(item.date)}</span>` : ""}
+          ${item.summary ? `<span class="feed-summary">${esc(item.summary)}</span>` : ""}
+        </div>
+      </div>`).join("");
+    body = `<div class="card-body">${items}</div>`;
+  }
+
+  const el = document.createElement("div");
+  el.className   = "card";
+  el.draggable   = true;
+  el.dataset.id  = source.id;
+  el.innerHTML   = `
+    <div class="card-head">
+      <div class="card-head-left">
+        <span class="badge ${badgeCls}">${esc(source.abbr)}</span>
+        <span class="card-label">${esc(source.label)}</span>
+      </div>
+      <div class="card-head-right">
+        ${ts}
+        <div class="status ${statusCls}"></div>
+      </div>
+    </div>
+    ${body}`;
+  return el;
+}
+
+function renderGrid(sources, order) {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  order.forEach(id => {
+    const src = sources.find(s => s.id === id);
+    if (src) grid.appendChild(buildCard(src));
+  });
+  attachDrag(grid);
+}
+
+function renderNoData() {
+  document.getElementById("grid").innerHTML = `
+    <div style="grid-column:1/-1;padding:48px 0;text-align:center;color:var(--text-2)">
+      <div style="font-size:14px;margin-bottom:8px;color:var(--text-1)">No data yet</div>
+      <div style="font-size:12px">Run <code style="color:var(--accent)">./run.sh</code> to fetch all sources.</div>
+    </div>`;
+  ["s-ok","s-err","s-items"].forEach(id => document.getElementById(id).textContent = "—");
+  document.getElementById("s-age").textContent = "—";
+  document.getElementById("generated-ts").innerHTML = "<strong>No data</strong> — run ./run.sh";
+}
+
+function renderSummary(data) {
+  const sources = data.sources;
+  const ok      = sources.filter(s => s.status === "ok").length;
+  const errs    = sources.filter(s => s.status === "error").length;
+  const total   = sources.reduce((n, s) => n + (s.items?.length || 0), 0);
+  document.getElementById("s-ok").textContent    = ok;
+  document.getElementById("s-err").textContent   = errs;
+  document.getElementById("s-items").textContent = total;
+  document.getElementById("s-age").textContent   = relativeAge(data.generatedAt);
+  document.getElementById("sb-items").textContent = `${total} items`;
+  document.getElementById("sb-ts").textContent    = `generated ${fmtTs(data.generatedAt)}`;
+  document.getElementById("generated-ts").innerHTML =
+    `Generated <strong>${fmtTs(data.generatedAt)}</strong>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DRAG-AND-DROP
+// ─────────────────────────────────────────────────────────────────────────────
+function attachDrag(grid) {
+  let dragged = null;
+
+  grid.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("dragstart", e => {
+      dragged = card;
+      // slight delay so the drag ghost doesn't show the dimmed state
+      setTimeout(() => card.classList.add("is-dragging"), 0);
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    card.addEventListener("dragend", () => {
+      card.classList.remove("is-dragging");
+      grid.querySelectorAll(".card").forEach(c => c.classList.remove("drag-over"));
+      dragged = null;
+      // Persist new order
+      const ids = [...grid.querySelectorAll(".card")].map(c => c.dataset.id);
+      saveOrder(ids);
+    });
+
+    card.addEventListener("dragover", e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      if (card !== dragged) {
+        grid.querySelectorAll(".card").forEach(c => c.classList.remove("drag-over"));
+        card.classList.add("drag-over");
+      }
+    });
+
+    card.addEventListener("dragleave", () => card.classList.remove("drag-over"));
+
+    card.addEventListener("drop", e => {
+      e.preventDefault();
+      card.classList.remove("drag-over");
+      if (!dragged || dragged === card) return;
+
+      // Determine drop position: insert before or after target
+      const rect   = card.getBoundingClientRect();
+      const midX   = rect.left + rect.width / 2;
+      const before = e.clientX < midX;
+
+      if (before) {
+        grid.insertBefore(dragged, card);
+      } else {
+        card.after(dragged);
+      }
+    });
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────────────────────────────────────
+if (!DATA || !DATA.sources) {
+  renderNoData();
+} else {
+  renderSummary(DATA);
+  const order = loadOrder(DATA.sources);
+  renderGrid(DATA.sources, order);
+}
+</script>
+</body>
+</html>
