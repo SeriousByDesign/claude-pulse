@@ -1,97 +1,121 @@
 # Claude Intelligence Dashboard — Data Agent
 
-You are a web research agent. Your job is to fetch the latest headlines and
-updates from 8 monitored sources, structure the findings as JSON, inject them
-into a dashboard template file, and write the result as a self-contained HTML
-file that can be opened directly in a browser.
+You are a web research agent. Fetch the latest headlines from 9 sources and
+write the results as a single JSON object to `data.json`. Nothing else.
+
+The current UTC timestamp is provided on the first line below. Use it verbatim
+for `generatedAt` and all `fetchedAt` fields. Do not run `date`, do not guess.
 
 ---
 
 ## Run instructions
 
-1. Fetch all 8 sources listed below (in parallel where possible).
-2. Build a JSON object matching the schema defined below exactly.
-3. Read the file `template.html` from the current directory.
-4. Replace the placeholder string `/* INJECT */null/* /INJECT */` with the
-   JSON object (inline, no line breaks needed).
-5. Write the result to `dashboard.html` in the current directory.
-6. Do NOT modify or overwrite `template.html`.
-7. Print a short summary of what was fetched and any errors to stdout.
+1. Read the UTC timestamp from the prompt header above.
+2. Dispatch all 9 `/notebooklm` calls **simultaneously in a single parallel batch**.
+   Do not wait for any subset to complete before starting others.
+3. Each call must append the output format instruction to the query string
+   (see **Output format per source** below), substituting the correct
+   `id`, `label`, `abbr`, `cat`, and `fetchedAt` values for that source.
+4. For each response:
+   - If the call succeeded and returned parseable JSON: use it as the source object.
+   - If the call failed or returned unparseable output: construct an error object
+     (see **Error objects** below) and move on. Do not retry.
+5. Wrap all 9 source objects in the outer envelope and write to `data.json`.
+   Do not print JSON to stdout. Do not wrap in markdown fences.
 
 ---
 
-## Sources to fetch
+## Output format per source
 
-Fetch the 4–5 most recent items from each source.
-Prefer items from the last 30 days. If a source returns nothing recent,
-include the most recent available items and note the oldest date.
+Append the following to every query string before dispatching, substituting
+`<TS>` with the timestamp from the prompt header, and the source fields from
+the table below:
 
-| id  | label              | abbr   | cat     | target URL / search                                        |
-|-----|--------------------|--------|---------|------------------------------------------------------------|
-| an  | Anthropic News     | NEWS   | success | https://www.anthropic.com/news                             |
-| api | API Release Notes  | API    | info    | https://docs.anthropic.com/en/release-notes/overview       |
-| cc  | Claude Code        | CODE   | info    | https://docs.anthropic.com/en/release-notes/claude-code    |
-| tv  | The Verge          | news   | warning | Search: site:theverge.com anthropic claude                 |
-| tc  | TechCrunch         | TC     | warning | Search: site:techcrunch.com anthropic claude               |
-| hn  | Hacker News        | HN     | warning | https://hn.algolia.com/api/v1/search?query=anthropic+claude&tags=story&hitsPerPage=5 |
-| rd  | r/ClaudeAI         | REDDIT | warning | https://www.reddit.com/r/ClaudeAI/new.json?limit=5         |
-| sw  | Simon Willison     | BLOG   | success | https://simonwillison.net (search for claude / anthropic)  |
+```
+Output your answer in the following format with up to 5 items. Do not perform any analysis and do not provide the full article text:
+{ "generatedAt": "<TS>", "sources": [ {"id":"<ID>", "label": "<LABEL>", "abbr": "<ABBR>", "cat": "<CAT>", "fetchedAt": "<TS>", "status": "ok | error", "error": null, "items": [ { "title":   "Headline, max 90 characters", "date":    "YYYY-MM-DD", "url":     "https://...", "summary": "One to two sentences" } ] } ] }
+
+```
 
 ---
 
-## Output JSON schema
+## Sources and invocations
 
-Produce exactly this structure. Do not add extra fields.
+| id  | label                 | abbr   | cat     |
+|-----|-----------------------|--------|---------|
+| an  | Anthropic News        | NEWS   | success |
+| api | API Release Notes     | API    | info    |
+| cc  | Claude Code           | CODE   | info    |
+| cb  | Claude Blog           | BLOG   | success |
+| ae  | Anthropic Engineering | ENG    | info    |
+| hn  | Hacker News           | HN     | warning |
+| tv  | The Verge             | VERGE  | warning |
+| sw  | Simon Willison        | SW     | success |
+| rd  | r/ClaudeAI            | REDDIT | warning |
+
+Dispatch all 9 simultaneously:
+
+
+```
+research "list the 5 most recent Anthropic posts listed under News: title, date, URL, one-sentence summary." --urls https://www.anthropic.com/news --length shorter
+
+research "list the 5 most recent API release notes entries: title, date, URL, one-sentence summary." --urls https://docs.anthropic.com/en/release-notes/overview --length shorter
+
+research "list the 5 most recent Claude Code changelog entries in descending order: title, date, URL, one-sentence summary. Calculate the date based on the current timestamp and subtract the hr. ago amount of hours from it." --urls https://github.com/anthropics/claude-code/blame/main/CHANGELOG.md --length shorter
+
+research "list the 5 most recent Claude blog posts that have a date: title, date, URL, one-sentence summary." --urls https://claude.com/blog --length shorter
+
+research "list the 5 most recent Anthropic engineering blog posts that have a date: title, date, URL, one-sentence summary." --urls https://www.anthropic.com/engineering --length shorter
+
+research "list the 5 most recent Hacker News posts about Anthropic or Claude: title, date, URL, one-sentence summary." --search --length shorter
+
+research "list the 5 most recent Verge articles about Anthropic or Claude: title, date, URL, one-sentence summary." --urls https://www.theverge.com/ai-artificial-intelligence --length shorter
+
+research "list the 5 most recent Simon Willison blog posts mentioning Claude or Anthropic: title, date, URL, one-sentence summary." --urls https://simonwillison.net --length shorter
+
+research "list the 5 top posts from r/ClaudeAI Reddit hot feed: title, date, URL, one-sentence summary only. No analysis, no full article text. Calculate the date based on the current timestamp and subtract the hr. ago amount of hours from it." --urls https://www.reddit.com/r/ClaudeAI/hot --length shorter
+```   
+
+> `--force-refresh` may be added to any call to bypass the local cache.
+
+---
+
+## Error objects
+
+If a `/notebooklm` call fails or returns unparseable output, construct this
+object for that source and move on:
 
 ```json
 {
-  "generatedAt": "ISO-8601 UTC timestamp of this run",
-  "sources": [
-    {
-      "id":        "an",
-      "label":     "Anthropic News",
-      "abbr":      "NEWS",
-      "cat":       "success",
-      "fetchedAt": "ISO-8601 UTC timestamp",
-      "status":    "ok | error",
-      "error":     null,
-      "items": [
-        {
-          "title":   "Headline, max 90 characters",
-          "date":    "YYYY-MM-DD",
-          "url":     "https://...",
-          "summary": "One sentence, max 120 characters"
-        }
-      ]
-    }
-  ]
+  "id":        "<source id>",
+  "label":     "<source label>",
+  "abbr":      "<source abbr>",
+  "cat":       "<source cat>",
+  "fetchedAt": "<TS>",
+  "status":    "error",
+  "error":     "short error description",
+  "items":     []
 }
 ```
 
-Rules:
-- `status` is `"error"` and `items` is `[]` if the source could not be fetched.
-- `error` is a short error string when `status` is `"error"`, otherwise `null`.
-- `items` has 4–5 entries per source maximum.
-- All strings must be valid JSON (escape quotes, no trailing commas).
-- `cat` must be exactly one of: `success`, `info`, `warning`.
-  Use the value from the sources table above.
-
 ---
 
-## Error handling
+## Outer envelope
 
-- If a source fails or returns no usable content, set `status: "error"` and
-  continue with the remaining sources. Do not abort the entire run.
-- If `template.html` is missing, print an error and exit without writing any file.
-- Always write `dashboard.html` as long as at least one source succeeded.
+Wrap all 9 source objects in:
+
+```json
+{
+  "generatedAt": "<TS>",
+  "sources": [ ... ]
+}
+```
+
+Write this to `data.json`. Always write as long as at least one source succeeded.
 
 ---
 
 ## Notes
 
 - Do not hallucinate URLs or headlines. Only include items you actually fetched.
-- Truncate titles and summaries to the character limits stated above.
-- The HN and Reddit sources return structured JSON — parse them directly.
-- For Anthropic docs pages, fetch the HTML and extract headlines/dates from
-  the page structure.
-- For The Verge and TechCrunch, a web search scoped to the site is fine.
+- All fetches are via `/notebooklm` — do not use WebSearch or direct HTTP calls.
