@@ -347,46 +347,46 @@
 // DATA — injected by Claude Code on each run. Do not edit this line manually.
 // ─────────────────────────────────────────────────────────────────────────────
 const DATA = /* INJECT */{
-  "generatedAt": "2026-04-07T07:46:56Z",
+  "generatedAt": "2026-04-08T06:44:10Z",
   "sources": [
     {
       "id": "an",
       "label": "Anthropic News",
       "abbr": "NEWS",
       "cat": "success",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
+          "title": "Project Glasswing",
+          "date": "2026-04-07",
+          "url": "https://www.anthropic.com/glasswing",
+          "summary": "Initiative bringing together AWS, Google, NVIDIA and others to secure critical software."
+        },
+        {
           "title": "Anthropic expands partnership with Google and Broadcom",
           "date": "2026-04-06",
           "url": "https://www.anthropic.com/news",
-          "summary": "Anthropic is increasing collaboration with Google and Broadcom to secure multiple gigawatts of next-generation computing resources."
+          "summary": "Securing large-scale compute resources for next-generation AI development."
         },
         {
-          "title": "Australian government and Anthropic sign MOU",
+          "title": "Australian government and Anthropic sign MOU for AI safety",
           "date": "2026-03-31",
           "url": "https://www.anthropic.com/news",
-          "summary": "Anthropic and the Australian government established a memorandum of understanding to cooperate on AI research and safety."
+          "summary": "Memorandum of understanding for collaborative AI safety initiatives and research."
         },
         {
           "title": "What 81,000 people want from AI",
           "date": "2026-03-18",
           "url": "https://www.anthropic.com/81k-interviews",
-          "summary": "Large-scale qualitative study exploring how users interact with AI and their aspirations for the technology."
+          "summary": "Large-scale qualitative study of 81,000 users exploring AI usage, dreams and fears."
         },
         {
-          "title": "Anthropic invests $100 million into the Claude Partner",
+          "title": "Anthropic invests $100 million in Claude Partner Network",
           "date": "2026-03-12",
           "url": "https://www.anthropic.com/news",
-          "summary": "Anthropic committed $100 million to support and expand its network of Claude platform partners."
-        },
-        {
-          "title": "Introducing The Anthropic Institute",
-          "date": "2026-03-11",
-          "url": "https://www.anthropic.com/news",
-          "summary": "Anthropic announced the creation of a new organization titled The Anthropic Institute."
+          "summary": "Expanding investment to support partner ecosystem within Claude Partner Network."
         }
       ]
     },
@@ -395,39 +395,39 @@ const DATA = /* INJECT */{
       "label": "API Release Notes",
       "abbr": "API",
       "cat": "info",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "max_tokens cap increased to 300k for Batches API",
+          "title": "Claude Mythos Preview and Messages API on Amazon Bedrock",
+          "date": "2026-04-07",
+          "url": "https://docs.anthropic.com/en/release-notes/overview",
+          "summary": "Claude Mythos gated research preview for defensive cybersecurity and Messages API on Bedrock."
+        },
+        {
+          "title": "Message Batches API Updates and Context Window Retirement",
           "date": "2026-03-30",
           "url": "https://docs.anthropic.com/en/release-notes/overview",
-          "summary": "Anthropic increased the max_tokens cap to 300k on the Message Batches API for select models."
+          "summary": "Max tokens increased to 300k and 1M context window beta for older models retiring April 30."
         },
         {
-          "title": "Models API now includes capability fields",
+          "title": "Models API Capability Fields",
           "date": "2026-03-18",
           "url": "https://docs.anthropic.com/en/release-notes/overview",
-          "summary": "The Models API now returns max_input_tokens, max_tokens, and capabilities for programmatic discovery."
+          "summary": "New capability fields including max_input_tokens and max_tokens added to Models API."
         },
         {
-          "title": "New display field for extended thinking",
+          "title": "Extended Thinking Display Control",
           "date": "2026-03-16",
           "url": "https://docs.anthropic.com/en/release-notes/overview",
-          "summary": "A new display field enables developers to omit thinking content for faster streaming speeds."
+          "summary": "New display field for extended thinking allows omitting thinking content for faster streaming."
         },
         {
-          "title": "1M token context window now generally available",
+          "title": "General Availability of 1M Token Context Window",
           "date": "2026-03-13",
           "url": "https://docs.anthropic.com/en/release-notes/overview",
-          "summary": "The 1M token context window reached general availability for Claude Opus 4.6 and Sonnet 4.6."
-        },
-        {
-          "title": "Automatic caching for Messages API launched",
-          "date": "2026-02-19",
-          "url": "https://docs.anthropic.com/en/release-notes/overview",
-          "summary": "Anthropic launched automatic caching for the Messages API with simplified configuration."
+          "summary": "1M context window GA for Claude Opus 4.6 and Sonnet 4.6 at standard pricing."
         }
       ]
     },
@@ -436,39 +436,39 @@ const DATA = /* INJECT */{
       "label": "Claude Code",
       "abbr": "CODE",
       "cat": "info",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "Version 2.1.92: Bedrock setup wizard and improvements",
+          "title": "Version 2.1.96",
+          "date": "2026-04-08",
+          "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
+          "summary": "Fixed Bedrock request failures with 403 errors when using AWS_BEARER_TOKEN_BEDROCK."
+        },
+        {
+          "title": "Version 2.1.94",
+          "date": "2026-04-07",
+          "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
+          "summary": "Added Amazon Bedrock support and increased default model effort level to high."
+        },
+        {
+          "title": "Version 2.1.92",
           "date": "2026-04-04",
           "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
-          "summary": "Adds interactive Bedrock setup wizard and improves Write tool performance by 60%."
+          "summary": "Interactive Bedrock setup wizard and forceRemoteSettingsRefresh setting added."
         },
         {
-          "title": "Version 2.1.91: MCP persistence and shell execution",
+          "title": "Version 2.1.91",
           "date": "2026-04-02",
           "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
-          "summary": "Adds MCP tool result persistence override and disableSkillShellExecution setting."
+          "summary": "MCP tool result persistence via metadata annotations and multi-line prompt support."
         },
         {
-          "title": "Version 2.1.90: /powerup interactive lessons added",
+          "title": "Version 2.1.90",
           "date": "2026-04-01",
           "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
-          "summary": "This version introduces /powerup command for interactive lessons and performance optimizations."
-        },
-        {
-          "title": "Version 2.1.89: Defer permission and flicker-free mode",
-          "date": "2026-04-01",
-          "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
-          "summary": "Added defer permission decision and CLAUDE_CODE_NO_FLICKER environment variable."
-        },
-        {
-          "title": "Version 2.1.87: Cowork Dispatch message delivery fix",
-          "date": "2026-03-29",
-          "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
-          "summary": "Fixed messages in Cowork Dispatch not being successfully delivered."
+          "summary": "New /powerup command for interactive feature lessons and rate-limit dialog fixes."
         }
       ]
     },
@@ -477,39 +477,39 @@ const DATA = /* INJECT */{
       "label": "Claude Blog",
       "abbr": "BLOG",
       "cat": "success",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "Claude now creates interactive charts and diagrams",
+          "title": "How and when to use subagents in Claude Code",
+          "date": "2026-04-07",
+          "url": "https://claude.com/blog",
+          "summary": "Best practices for utilizing subagents to optimize coding workflows in Claude Code."
+        },
+        {
+          "title": "Harnessing Claude's intelligence",
           "date": "2026-04-02",
           "url": "https://claude.com/blog",
-          "summary": "Claude's new capability to generate interactive visual data like charts and diagrams."
+          "summary": "Advanced techniques for leveraging Claude's reasoning on the Claude Platform."
         },
         {
           "title": "Audit Claude Platform activity with Compliance API",
           "date": "2026-03-30",
           "url": "https://claude.com/blog",
-          "summary": "Introduces Compliance API for enterprises to monitor and audit Claude Platform activity."
+          "summary": "Compliance API designed to monitor and audit activity across the Claude Platform."
         },
         {
           "title": "Auto mode for Claude Code",
           "date": "2026-03-24",
           "url": "https://claude.com/blog",
-          "summary": "Announcement of autonomous Auto mode for the Claude Code developer tool."
+          "summary": "Autonomous mode within Claude Code streamlines complex developer tasks."
         },
         {
           "title": "Put Claude to work on your computer",
           "date": "2026-03-23",
           "url": "https://claude.com/blog",
-          "summary": "Describes how to integrate Claude directly into local computer environments."
-        },
-        {
-          "title": "Product management on the AI exponential",
-          "date": "2026-03-19",
-          "url": "https://claude.com/blog",
-          "summary": "Explores the evolving role of product management in rapid AI technology growth."
+          "summary": "New features allowing Claude integration with local environments through desktop apps."
         }
       ]
     },
@@ -518,39 +518,39 @@ const DATA = /* INJECT */{
       "label": "Anthropic Engineering",
       "abbr": "ENG",
       "cat": "info",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "Claude Code auto mode: safer permission handling",
+          "title": "Claude Code auto mode: a safer way to skip permissions",
           "date": "2026-03-25",
           "url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
-          "summary": "Introduces secure mechanism for Claude Code to execute commands without manual permissions."
+          "summary": "Secure implementation for bypassing manual permissions during autonomous operations."
         },
         {
-          "title": "Harness design for long-running applications",
+          "title": "Harness design for long-running application development",
           "date": "2026-03-24",
           "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
-          "summary": "Outlines technical strategies for evaluating AI applications designed for extended runtimes."
+          "summary": "Engineering strategies for testing harnesses tailored to long-running AI agents."
         },
         {
-          "title": "Eval awareness in Claude Opus 4.6's BrowseComp",
+          "title": "Eval awareness in Claude Opus 4.6's BrowseComp performance",
           "date": "2026-03-06",
           "url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
-          "summary": "Examines how evaluation awareness influences Claude Opus 4.6's benchmark results."
+          "summary": "Analysis of how evaluation awareness impacts Claude Opus 4.6 benchmark scores."
         },
         {
-          "title": "Building a C compiler with parallel Claudes",
+          "title": "Building a C compiler with a team of parallel Claudes",
           "date": "2026-02-05",
           "url": "https://www.anthropic.com/engineering/building-c-compiler",
-          "summary": "Details implementation of parallel Claude instances collaborating to build a C compiler."
+          "summary": "Parallel orchestration of Claude models to successfully build a functional C compiler."
         },
         {
           "title": "Designing AI-resistant technical evaluations",
           "date": "2026-01-21",
           "url": "https://www.anthropic.com/engineering/AI-resistant-technical-evaluations",
-          "summary": "Discusses methodologies for creating technical assessments valid in the era of AI coding."
+          "summary": "Methodologies for constructing technical benchmarks effective despite advanced AI capabilities."
         }
       ]
     },
@@ -559,39 +559,39 @@ const DATA = /* INJECT */{
       "label": "Hacker News",
       "abbr": "HN",
       "cat": "warning",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "Claude Code Down",
-          "date": "2026-04-06",
-          "url": "https://news.ycombinator.com/item?id=claude-code-down",
-          "summary": "Users reported widespread authentication failures in Claude Code unlisted on status page."
+          "title": "Anthropic's Project Glasswing sounds necessary to me",
+          "date": "2026-04-08",
+          "url": "https://news.ycombinator.com/item?id=47679121",
+          "summary": "Discussion on Project Glasswing's utility for automated bug scanning in IoT devices."
         },
         {
-          "title": "Anthropic limits third-party harness access",
+          "title": "Why isn't Anthropic eating their own dogfood?",
+          "date": "2026-04-08",
+          "url": "https://news.ycombinator.com/item?id=47679000",
+          "summary": "Claude Max subscriber critiques Anthropic's support reliability and tool usage practices."
+        },
+        {
+          "title": "Claude Code unusable for complex engineering with Feb updates",
+          "date": "2026-04-07",
+          "url": "https://github.com/anthropics/claude-code/issues/42796",
+          "summary": "Developers report significant quality regressions after adaptive thinking defaults."
+        },
+        {
+          "title": "Anthropic expands partnership with Google and Broadcom",
+          "date": "2026-04-07",
+          "url": "https://news.ycombinator.com/item?id=47670000",
+          "summary": "Multi-billion dollar expansion of compute infrastructure with Google TPUs and Broadcom."
+        },
+        {
+          "title": "Anthropic bans OpenClaw from Claude subscriptions",
           "date": "2026-04-04",
-          "url": "https://news.ycombinator.com/item?id=anthropic-limits",
-          "summary": "Anthropic restricted third-party harnesses from using subscription limits as of April 4."
-        },
-        {
-          "title": "Claude Code source leaked via npm packaging error",
-          "date": "2026-04-01",
-          "url": "https://thehackernews.com/2026/04/claude-code-tleaked-via-npm-packaging.html",
-          "summary": "Anthropic confirmed human error in npm packaging exposed 512k lines of source code."
-        },
-        {
-          "title": "Claude loses >99% uptime in Q1 2026",
-          "date": "2026-03-28",
-          "url": "https://news.ycombinator.com/item?id=claude-uptime",
-          "summary": "Anthropic attributed uptime drop to unprecedented traffic growth and production re-engineering."
-        },
-        {
-          "title": "Anthropic takes legal action against OpenCode",
-          "date": "2026-03-20",
-          "url": "https://news.ycombinator.com/item?id=anthropic-legal",
-          "summary": "Anthropic threatened legal action against third-party developers using internal APIs."
+          "url": "https://theverge.com/ai-artificial-intelligence/907074/anthropic-openclaw-claude-subscription-ban",
+          "summary": "Anthropic blocks third-party tools from subscription quotas, mandating API billing instead."
         }
       ]
     },
@@ -600,27 +600,33 @@ const DATA = /* INJECT */{
       "label": "The Verge",
       "abbr": "VERGE",
       "cat": "warning",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "Anthropic expands Google and Broadcom partnership",
+          "title": "New Anthropic model found security problems in OSes",
+          "date": "2026-04-07",
+          "url": "https://www.theverge.com/ai-artificial-intelligence",
+          "summary": "Project Glasswing identifies vulnerabilities across all major operating systems."
+        },
+        {
+          "title": "Anthropic signs AI infrastructure deal with Google, Broadcom",
           "date": "2026-04-06",
           "url": "https://www.theverge.com/ai-artificial-intelligence",
-          "summary": "Anthropic signed major infrastructure deal with Google and Broadcom for TPU capacity."
+          "summary": "Multiple gigawatts of TPU capacity expected to power frontier Claude models in 2027."
         },
         {
           "title": "Teens are torturing AI chatbots and dating them",
           "date": "2026-04-05",
           "url": "https://www.theverge.com/ai-artificial-intelligence",
-          "summary": "Report on complex ways younger users interact with AI like Claude ranging from harassment."
+          "summary": "Younger users engaging with models like Claude for emotional support and role-playing."
         },
         {
-          "title": "Anthropic bans OpenClaw with subscriber fee requirement",
+          "title": "Anthropic bans OpenClaw from Claude subscriptions",
           "date": "2026-04-03",
           "url": "https://www.theverge.com/ai-artificial-intelligence",
-          "summary": "Anthropic restricted OpenClaw access by implementing additional fees for subscribers."
+          "summary": "Pricing updates restrict OpenClaw use with Claude subscriptions, requiring API billing."
         }
       ]
     },
@@ -629,39 +635,39 @@ const DATA = /* INJECT */{
       "label": "Simon Willison",
       "abbr": "SW",
       "cat": "success",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
+          "title": "Project Glasswing restricting Claude Mythos to security researchers",
+          "date": "2026-04-07",
+          "url": "https://simonwillison.net",
+          "summary": "Anthropic restricts latest model access to preview group of security partners."
+        },
+        {
           "title": "Tool Cleanup Claude Code Paste",
           "date": "2026-04-06",
           "url": "https://simonwillison.net",
-          "summary": "Utility designed to remove excess whitespace from text copied from Claude Code terminal."
+          "summary": "Utility strips excessive whitespace from Claude Code terminal application output."
         },
         {
           "title": "Eight years of wanting, three months building with AI",
           "date": "2026-04-05",
           "url": "https://simonwillison.net",
-          "summary": "Review of agentic engineering showing Claude Code helping prototype SQLite developer tools."
+          "summary": "Claude Code helped build SQLite devtools prototype by automating 400+ grammar rules."
         },
         {
-          "title": "Release scan-for-secrets 0.1 for sharing files",
+          "title": "Release scan-for-secrets 0.1",
           "date": "2026-04-05",
           "url": "https://simonwillison.net",
-          "summary": "Python tool for identifying sensitive data implemented using Claude Code."
+          "summary": "Tool ensures API keys and secrets are redacted from published Claude Code transcripts."
         },
         {
-          "title": "Research into LLM provider HTTP APIs",
+          "title": "Release research-llm-apis 2026-04-04",
           "date": "2026-04-05",
           "url": "https://simonwillison.net",
-          "summary": "Repository where Claude Code analyzed client libraries to design new LLM abstraction layer."
-        },
-        {
-          "title": "Vulnerability Research Is Cooked",
-          "date": "2026-04-03",
-          "url": "https://simonwillison.net",
-          "summary": "Exploration of frontier models' impact on exploit development citing Anthropic researcher."
+          "summary": "Claude Code analyzed Python client libraries to design LLM abstraction layer."
         }
       ]
     },
@@ -670,39 +676,39 @@ const DATA = /* INJECT */{
       "label": "r/ClaudeAI",
       "abbr": "REDDIT",
       "cat": "warning",
-      "fetchedAt": "2026-04-07T07:46:56Z",
+      "fetchedAt": "2026-04-08T06:44:10Z",
       "status": "ok",
       "error": null,
       "items": [
         {
-          "title": "Someone made a digital whip for Claude productivity",
-          "date": "2026-04-07",
-          "url": "https://www.reddit.com/r/ClaudeAI/",
-          "summary": "Humor post detailing a creative digital whip tool jokingly to increase productivity."
+          "title": "Claude's thinking depth dropped 67% since February",
+          "date": "2026-04-08",
+          "url": "https://www.reddit.com/r/ClaudeAI/comments/1ses1qm/anthropic_stayed_quiet_until_someone_showed/",
+          "summary": "Evidence documents significant decline in reasoning after February updates."
         },
         {
-          "title": "Walking home without talking to Claude",
-          "date": "2026-04-07",
-          "url": "https://www.reddit.com/r/ClaudeAI/",
-          "summary": "Humor post about choosing not to interact with Claude during a commute walk."
+          "title": "90%+ fewer tokens via pre-compiled wiki instead of exploring",
+          "date": "2026-04-08",
+          "url": "https://www.reddit.com/r/ClaudeAI/comments/1sfdztg/90_fewer_tokens_per_session_by_reading_a/",
+          "summary": "Codesight tool compiles codebases into domain wikis reducing token consumption."
         },
         {
-          "title": "I'm the bottleneck",
-          "date": "2026-04-06",
-          "url": "https://www.reddit.com/r/ClaudeAI/",
-          "summary": "Praise post where user acknowledges personal pace limits their work more than AI."
+          "title": "Claude Mythos update and system card",
+          "date": "2026-04-08",
+          "url": "https://www.reddit.com/r/ClaudeAI/comments/1sfc54a/claude_mythos_update_and_system_card/",
+          "summary": "Gated research preview with adaptive thinking for cybersecurity and autonomous engineering."
         },
         {
-          "title": "Anthropic TPU infrastructure deal announcement",
-          "date": "2026-04-06",
-          "url": "https://www.reddit.com/r/ClaudeAI/",
-          "summary": "News report on Anthropic securing multiple gigawatts of next-generation TPU capacity."
+          "title": "Reddit is broken! I proved it with Claude",
+          "date": "2026-04-08",
+          "url": "https://www.reddit.com/r/ClaudeAI/comments/1sfk205/reddit_is_broken_i_proved_it_with_claude/",
+          "summary": "Chrome extension using Claude re-ranks threads by relevance instead of karma."
         },
         {
-          "title": "Claude Code diagnosed 4-year hardware bottleneck",
-          "date": "2026-04-07",
-          "url": "https://www.reddit.com/r/ClaudeAI/comments/1sem8kv/",
-          "summary": "User leveraged Claude Code via SSH to identify RAM speed, PCIe, and other hardware issues."
+          "title": "Sonnet 4.6 elevated rate of errors status update",
+          "date": "2026-04-08",
+          "url": "https://www.reddit.com/r/ClaudeAI/comments/1sfl006/claude_status_update_sonnet_46_elevated_rate_of/",
+          "summary": "Official incident alert for increased error rates on Claude Sonnet 4.6 model."
         }
       ]
     }
